@@ -1,0 +1,43 @@
+global
+    log 127.0.0.1   local0
+    log 127.0.0.1   local1 notice
+    debug
+    stats timeout 30s
+    maxconn {{with $maxconn:=key "service/haproxy/maxconn"}}{{$maxconn}}{{else}}4096{{end}}
+
+defaults
+    log global
+    option httplog
+    option dontlognull
+    mode http{{range ls "service/haproxy/timeouts"}}
+    timeout {{.Key}} {{.Value}}{{else}}
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000{{end}}
+
+# This declares the endpoint where your clients will connect.
+frontend fe
+    bind *:80
+    mode http
+    default_backend be
+
+# This is the Logstash servers backend. In effect any TCP request coming
+# to the forwarder that frontend defined above will be proxied to
+# this backend public endpoints.
+backend be
+    mode http
+    balance roundrobin
+    option forwardfor
+    {{range $c,$d:=service "python-micro-service"}}server host{{$c}} {{.Address}}:{{.Port}} check
+    {{end}}
+
+# This declares a view into HAProxy statistics,
+# You do not need credentials to view this page and you can
+# turn it off once you are done with setup.
+listen stats
+    bind *:3000
+    mode http
+    stats enable
+    stats refresh 30s
+    stats show-node
+    stats uri /
