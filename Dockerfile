@@ -17,4 +17,4 @@ COPY haproxy.cfg /tmp/haproxy.cfg
 COPY haproxy.ctmpl /tmp/haproxy.ctmpl
 
 ENTRYPOINT ["consul-template","-config=/tmp/haproxy.cfg"]
-CMD ["-consul=consul.service.consul:8500"]
+CMD ["-consul=127.0.0.1:8500"]
