@@ -9,7 +9,7 @@ update nodes in Consul KV and reload HAProxy when the KV changes.
 $ docker run -d -P --name haproxy gnhuy91/haproxy
 ```
 
-### References:
+### References
 - http://sirile.github.io/2015/05/18/using-haproxy-and-consul-for-dynamic-service-discovery-on-docker.html
 - https://github.com/CiscoCloud/haproxy-consul
 - https://jlordiales.me/2015/04/01/consul-template/
