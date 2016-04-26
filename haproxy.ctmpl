@@ -21,9 +21,8 @@ frontend fe
     mode http
     default_backend be
 
-# This is the Logstash servers backend. In effect any TCP request coming
-# to the forwarder that frontend defined above will be proxied to
-# this backend public endpoints.
+# Any request coming to the forwarder that frontend defined above
+# will be proxied to this backend public endpoints.
 backend be
     mode http
     balance roundrobin
