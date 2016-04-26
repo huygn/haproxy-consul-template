@@ -6,7 +6,7 @@ update nodes in Consul KV and reload HAProxy when the KV changes.
 1. Run a Consul instance (server/agent) on current machine
 2. Run this Docker container:
 ```
-$ docker run -d -P --name haproxy gnhuy91/haproxy
+$ docker run -d --net=host --name=haproxy gnhuy91/haproxy-consul-template
 ```
 
 ### References
