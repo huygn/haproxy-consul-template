@@ -15,20 +15,24 @@ defaults
     timeout client 50000
     timeout server 50000{{end}}
 
-# This declares the endpoint where your clients will connect.
-frontend fe
-    bind *:80
-    mode http
-    default_backend be
 
-# Any request coming to the forwarder that frontend defined above
-# will be proxied to this backend public endpoints.
-backend be
+## This declares the endpoint where your clients will connect.
+frontend http-in
+    bind *:80{{range $i,$a:=services}}{{$path:=.Name}}{{range .Tags}}{{if eq . "rest"}}
+    acl app{{$i}} path_beg -i /{{$path}}{{end}}{{end}}{{end}}
+    {{range $i,$a:=services}}{{range .Tags}}{{if eq . "rest"}}
+    use_backend be_app{{$i}} if app{{$i}}{{end}}{{end}}{{end}}
+
+{{range $i,$a:=services}}{{$path:=.Name}}{{range .Tags}}{{if eq . "rest"}}
+backend be_app{{$i}}
     mode http
     balance roundrobin
     option forwardfor
-    {{range $c,$d:=service "python-micro-service"}}server host{{$c}} {{.Address}}:{{.Port}} check
-    {{end}}
+    option httpchk HEAD / HTTP/1.1\r\nHost:localhost
+    reqrep ^([^\ ]*\ /){{$path}}[/]?(.*)     \1\2
+    {{range $c,$d:=service $a.Name}}{{range .Tags}}{{if eq . "rest"}}
+    server host{{$c}} {{$d.Address}}:{{$d.Port}} check{{end}}{{end}}{{end}}
+    {{end}}{{end}}{{end}}
 
 # This declares a view into HAProxy statistics,
 # You do not need credentials to view this page and you can
