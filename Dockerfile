@@ -1,5 +1,7 @@
 FROM alpine
 
+MAINTAINER Huy Giang <gnhuy91@gmail.com>
+
 ENV CONSUL_TEMPLATE_VERSION=0.14.0
 
 # Update wget to get support for SSL
@@ -13,8 +15,10 @@ RUN wget -q --no-check-certificate https://releases.hashicorp.com/consul-templat
     mv consul-template /usr/bin && \
     rm -rf /tmp/*
 
-COPY haproxy.cfg /tmp/haproxy.cfg
-COPY haproxy.ctmpl /tmp/haproxy.ctmpl
+RUN mkdir -p /consul-template/config.d /consul-template/template.d
 
-ENTRYPOINT ["consul-template","-config=/tmp/haproxy.cfg"]
+COPY haproxy.hcl /consul-template/config.d/haproxy.hcl
+COPY haproxy.ctmpl /consul-template/template.d/haproxy.ctmpl
+
+ENTRYPOINT ["consul-template","-config=/consul-template/config.d/haproxy.hcl"]
 CMD ["-consul=127.0.0.1:8500"]
