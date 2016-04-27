@@ -8,7 +8,7 @@ update nodes in Consul KV and reload HAProxy when the KV changes.
 ```
 $ docker run -d --net=host --name=haproxy gnhuy91/haproxy-consul-template
 ```
-- Start some test services:
+- Start some test services, note the `rest` tag, this will make Registrator add the tag to Consul:
 ```
 $ docker run -d -P -e SERVICE_TAGS=rest --name=node1 jlordiales/python-micro-service:latest
 $ docker run -d -P -e SERVICE_TAGS=rest --name=node2 jlordiales/python-micro-service:latest
