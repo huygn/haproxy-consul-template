@@ -8,7 +8,7 @@ update nodes in Consul KV and reload HAProxy when the KV changes.
 ```
 $ docker run -d --net=host -p 80:80 --name=haproxy gnhuy91/haproxy-consul-template
 ```
-- Start some test services, note the `rest` tag - it makes Registrator add the tag to Consul:
+- Start some test services, note the `rest` tag - it makes Registrator add the tag to Consul (and `SERVICE_CHECK_*` env vars for registering health checks to Consul):
 ```shell
 # This will create 3 containers
 $ for i in $(seq 1 3); do \
@@ -27,6 +27,9 @@ $ while true; do curl <HAProxy IP>:80/python-micro-service/; echo -----; sleep 1
 ```
 
 You can stop and start those test services (`docker stop node1`) and see the output of above `curl` changes accordingly.
+
+### Bonus
+`curl localhost:8500/v1/health/checks/python-micro-service | jq .` for health checks status.
 
 ### References
 - http://sirile.github.io/2015/05/18/using-haproxy-and-consul-for-dynamic-service-discovery-on-docker.html
