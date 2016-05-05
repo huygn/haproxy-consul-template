@@ -22,7 +22,7 @@ $ for i in $(seq 1 3); do \
   ; done
 ```
 - In another terminal, try calling the services via HAProxy:
-```
+```shell
 $ while true; do curl <HAProxy IP>:80/python-micro-service/; echo -----; sleep 1; done;
 ```
 
