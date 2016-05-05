@@ -14,7 +14,7 @@ $ docker run -d -P -e SERVICE_TAGS=rest --name=node1 jlordiales/python-micro-ser
 $ docker run -d -P -e SERVICE_TAGS=rest --name=node2 jlordiales/python-micro-service:latest
 $ docker run -d -P -e SERVICE_TAGS=rest --name=node3 jlordiales/python-micro-service:latest
 ```
-- In another teminal, try calling the services via HAProxy:
+- In another terminal, try calling the services via HAProxy:
 ```
 $ while true; do curl <HAProxy IP>:80/python-micro-service/; echo -----; sleep 1; done;
 ```
