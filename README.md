@@ -26,7 +26,7 @@ $ for i in $(seq 1 3); do \
 $ while true; do curl <HAProxy IP>:80/python-micro-service/; echo -----; sleep 1; done;
 ```
 
-You can stop and start those test services (`docker stop node1`) and see the output of above `curl` changes accordingly.
+You can stop and start those test services (`docker stop node1`) on a new terminal and see the output of above `curl` changes accordingly.
 
 ### Bonus
 `curl localhost:8500/v1/health/checks/python-micro-service | jq .` for health checks status.
